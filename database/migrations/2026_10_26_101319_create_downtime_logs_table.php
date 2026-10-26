@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('monitored_devices', function (Blueprint $table) {
+        Schema::create('downtime_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('device_id')->constrained('monitored_devices')->onDelete('cascade');
+            $table->timestamp('went_offline_at');
+            $table->timestamp('came_online_at')->nullable();
+            $table->integer('total_duration_minutes')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('monitored_devices');
+        Schema::dropIfExists('downtime_logs');
     }
 };
